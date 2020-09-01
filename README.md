@@ -1,4 +1,3 @@
-# 300ASS4
 LMP2: Memory Management
 =======================
 
