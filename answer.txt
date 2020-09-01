@@ -1,0 +1,74 @@
+Team Members:
+
+Huiyi Zou
+301355563
+
+Hui Wu
+301329435
+
+Caijie Zhao
+301354256
+
+Yuanying Mu
+301354135
+
+
+Questions ========= 
+ 
+1) Why is it so important that adjacent free blocks not be left as such?  What would happen if they were permitted? 
+
+   If we don't merge adjacent free blocks, then it is like a insertion into doubly linked list, that will reduce the performance of strategies.
+   But if we merge adjacent free blocks, it allows the memory manager to serve the requests of the largest possible size
+
+2) Which function(s) need to be concerned about adjacent free blocks? 
+ 
+   The myfree() has to concerned about adjacent free blocks, because when this funciton deallocate a block of memory, it has to care about if its neighbor is also deallocated 
+
+3) Name one advantage of each strategy. 
+   
+   First-fit: is simple and the fastest search strategy as it searches only the first block
+   Best-fit: minimizes the wastage space
+   Worst-fit: works best if allocation are of medium size
+   Next-fit: memory is used more evenly, because the search for a free partition doesn't always start at the beginning of the list, which will lead less internal fragment
+
+4) Run the stress test on all strategies, and look at the results (tests.out). What is the significance of "Average largest free block"?  
+   Which strategy generally has the best performance in this metric?  Why do you think this is? 
+   
+   The significance of "average largest free block" is to keep the largest block allocated.
+   Best fit has the best performance in this metric, because this algorithm always try to find the smallest block that serve the request,
+   then it is likely to leave more large blocks to be allocated
+
+5) In the stress test results (see Question 4), what is the significance of "Average number of small blocks"?  Which strategy generally 
+   has the best performance in this metric?  Why do you think this is? 
+   
+   The significance of "average number of small blocks" is to show how much memory is unlikely to be available
+   Worst fit has the best performance in this metric as it always choose the largest possible free block, as a result, it can prevent small holes 
+   from getting too small, then use memory and data more efficiently
+
+6) Eventually, the many mallocs and frees produces many small blocks scattered across the memory pool.  There may be enough space to 
+   allocate a new block, but not in one place.  It is possible to compact the memory, so all the free blocks are moved to one large free block.  
+   How would you implement this in the system you have built? 
+ 
+   write a function that we can compact small blocks together, copy allocated blocks with its data to lowest possible address, and we get all free 
+   memory in a higher address
+
+7) If you did implement memory compaction, what changes would you need to make in how such a system is invoked (i.e. from a user's perspective)? 
+ 
+   compaction essentially moves memory around, so we need to create a pointer that always point to the correct block to keep track of this process, 
+   because pointers go to different blocks when compaction moves these memory blocks
+
+8) How would you use the system you have built to implement realloc?  (Brief explanation; no code) 
+ 
+   realloc() is used to resize memory allocation without losing old data, so I can have a pointer point to the old data, and use mymalloc() to allocate
+   a new sized block and copy old data to this block, then use myfree() to free the old block
+
+9) Which function(s) need to know which strategy is being used?  Briefly explain why this/these and not others. 
+
+   mymalloc(), it has to know the strategy to apply to allocate memory
+   myfree(), if it is using next fit algorithm, it needs to update block 
+
+10) Give one advantage of implementing memory management using a linked list over a bit array, where every bit tells whether its corresponding 
+    byte is allocated. 
+
+    The mymalloc() is more efficient using linked list, especially large memory allocation, because the initial byte of each block is tracked in linked list. 
+    but with a array, you have to track each byte.
